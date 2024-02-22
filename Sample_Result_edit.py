@@ -46,10 +46,15 @@ with arcpy.da.SearchCursor(feature_class, fields_in_server) as cursor:
     for row in cursor:
         # Create a dictionary to map feature class field names to values
         data_dict = dict(zip(fields_in_server, row))
-
+        sample_id=1
         # Write data to the next available row in Excel, treating all values as text
         for excel_field, server_field in field_mapping.items():
             sheet.cell(row=row_index, column=fields_in_excel.index(excel_field) + 1, value=str(data_dict[server_field])) # value=str(data_dict[server_field]))
+
+        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        ws_id_column_index = fields_in_excel.index('Sample ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
+        sheet.cell(row=row_index, column=ws_id_column_index, value=sample_id)
+        sample_id+=1
 
         # Update the entire 'WS ID*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('WS ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
