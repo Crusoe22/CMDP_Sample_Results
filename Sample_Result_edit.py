@@ -5,7 +5,7 @@ import datetime
 
 # Feature class location
 feature_class = r'\\portalserver\Production Projects\GISDBSERVER22.sde\HUD_LGIM.DBO.State_Lab_Samples'
-excel_file = r"\\VSERVER22\ForEveryone\Nolan\CMDP_Sample_Result_Template - Excel.xlsx"
+excel_file = r"\\VSERVER22\ForEveryone\Nolan\CMDP_Sample_Result_Template - Excel.xlsx" 
 
 # Open Excel file
 workbook = openpyxl.load_workbook(excel_file)
@@ -15,7 +15,7 @@ sheet = workbook.active
 excel_column_names = [cell.value for cell in sheet[8]]
 
 fields_in_server = [ 'OBJECTID', 'DATE_REC_LAB', 'ROTATION', 'INSTALLDATE', 'NAME',  'ADDRESS', 'SAMPLE_DATE', 'SAMPLE_TIME', 'SAMPLEVAL', 'THRESHHIT',
-                    'DISINFRULE', 'ENABLED', 'ACTIVEFLAG', 'OWNEDBY', 'OWNEDBY', 'LASTUPDATE', 'LASTEDITOR', 'TOTAL_COLIFORM_RESULTS', 'TOTAL_COLIFORM_RESULTS', 'SECTION', 
+                    'DISINFRULE', 'ENABLED', 'ACTIVEFLAG', 'OWNEDBY', 'OWNEDBY', 'LASTUPDATE', 'LASTEDITOR', 'OBJECTID', 'TOTAL_COLIFORM_RESULTS', 'SECTION', 
                     'SAMPLE_NUMBER', 'SAMPLE_FIXTURE', 'EMPLOYEE', 'STATIONID', 'MAP_NUMBER', 'SPDATE', 'SAMPLE_TYPE', 'LOCATION_COMMENTS', 'LOCATION_COMMENTS',   
                     'DATE_REC_LAB', 'TIME_REC_LAB', 'ANALYSIS_DATE', 'ANALYSIS_TIME', 'REC_LAB_BY', 'LOCATION_COMMENTS', 'ANALYST', 'TOTAL_COLIFORM_RESULTS', 'TESTED', 'ELEVATION', 'SAMPLE_READING', 'LOCATION_COMMENTS'  ]
 
@@ -55,46 +55,38 @@ with arcpy.da.SearchCursor(feature_class, fields_in_server) as cursor:
         ws_id_column_index = fields_in_excel.index('WS ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='0000303')
 
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        # Update the entire 'Facility ID*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Facility ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='DIST.')
 
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        # Update the entire 'Sample Type*f' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Sample Type*f') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='Routine')
 
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        # Update the entire 'Sample Volume (ML) f*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Sample Volume (ML) f') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='100 mg/l')
 
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        # Update the entire 'Analyte*f\n[Code - Name]' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Analyte*f\n[Code - Name]') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='3100 - COLIFORM (TCR)')
 
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        # Update the entire 'Analyzing Lab ID' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Analyzing Lab ID') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='03132')
 
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        # Update the entire 'Parameter* \n[Code - Name]' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Parameter* \n[Code - Name]') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='0999 - Chlorine')
 
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
+        # Update the entire 'Result UOM*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Result UOM*') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='mg/L')
-        # Copy the above code for each repeating column
-
-
+        
         row_index += 1
 
-# Save the modified Excel file
-workbook.save(excel_file)
 
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
-
-# Delete rows where 'Sample Received Date f' equals 'None'
+# Delete rows where 'Collection Date*f' equals 'None'
 delete_rows = []
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
@@ -112,12 +104,7 @@ for row in reversed(delete_rows):
 workbook.save(excel_file)
 
 
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
-
-
-# Format 'Collection Date*f' to MM/DD/YYYY
+# Format 'Sample Received Date f' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Sample Received Date f') + 1).value
     
@@ -134,17 +121,8 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
 
-
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
-
-
-# Format 'Collection Date*f' to MM/DD/YYYY
+# Format 'Sample Received Date f' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Sample Received Date f') + 1).value
     
@@ -161,12 +139,6 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
 
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
@@ -184,8 +156,6 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
 
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
@@ -203,13 +173,6 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
-
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
 
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Start Date f') + 1).value
@@ -227,13 +190,6 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
-
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
 
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Start Date f') + 1).value
@@ -251,12 +207,6 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
 
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Completed Date') + 1).value
@@ -274,12 +224,6 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
 
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Completed Date') + 1).value
@@ -297,16 +241,10 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-# Save the final modified Excel file after formatting dates
-workbook.save(excel_file)
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
 
 # Clear data in 'Repeat Location' and 'Original Sample ID' columns
 columns_to_clear = ['Sample ID*', 'Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference',
-                     'Volume Assayed (ML) f', 'Method f', 'Source Type' ]
+                     'Volume Assayed (ML) f', 'Method f', 'Source Type', 'A/P*f' ]
 
 for column in columns_to_clear:
     column_index = fields_in_excel.index(column) + 1  # Adding 1 to convert from 0-based to 1-based index
@@ -314,13 +252,6 @@ for column in columns_to_clear:
     for row in range(9, sheet.max_row + 1):
         sheet.cell(row=row, column=column_index).value=None
 
-# Save the final modified Excel file after clearing data
-workbook.save(excel_file)
-
-
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
 
 # Find the first empty row in the Excel sheet
 row_index = 9  # Assuming the data starts from the ninth row in Excel
@@ -332,31 +263,21 @@ for row_number in range(row_index, min(row_index + 70, sheet.max_row + 1)):
     sheet.cell(row=row_number, column=fields_in_excel.index('Sample ID*') + 1, value=row_number - row_index + 1)
 
 
+# Find the index of the 'Comment' and 'A/P*f' columns
+comment_column_index = fields_in_excel.index('Comment.') + 1  # Adding 1 to convert from 0-based to 1-based index
+ap_column_index = fields_in_excel.index('A/P*f') + 1  # Adding 1 to convert from 0-based to 1-based index
+
+# Iterate through rows and update 'A/P*f' column based on 'Comment'
+for row in range(9, sheet.max_row + 1):
+    comment_value = sheet.cell(row=row, column=comment_column_index).value
+
+    # Check if 'Comment' contains 'Negative' (case-insensitive)
+    if comment_value and 'negative' in comment_value.strip().lower():
+        sheet.cell(row=row, column=ap_column_index, value='Absent')
+
+            # Check if 'Comment' contains 'Positive' (case-insensitive)
+    elif comment_value and 'positive' in comment_value.strip().lower():
+        sheet.cell(row=row, column=ap_column_index, value='Present')
 
 # Save the modified Excel file
 workbook.save(excel_file)
-
-'''
-# Open Excel file
-workbook = openpyxl.load_workbook(excel_file)
-sheet = workbook.active
-
-# Find the index of the 'A/P*f' column
-ap_column_index = fields_in_excel.index('A/P*f') + 1  # Adding 1 to convert from 0-based to 1-based index
-
-# Iterate through rows and update 'A/P*f' column
-for row in range(9, sheet.max_row + 1):
-    cell_value = sheet.cell(row=row, column=ap_column_index).value
-    
-    if cell_value:
-        # Check for 'Negative' and update to 'Absent'
-        if cell_value.strip().lower() == 'negative':
-            sheet.cell(row=row, column=ap_column_index, value='Absent')
-        # Check for 'Positive' and update to 'Present'
-        elif cell_value.strip().lower() == 'positive':
-            sheet.cell(row=row, column=ap_column_index, value='Present')
-        elif cell_value.strip().lower() == 'none':
-            sheet.cell(row=row, column=ap_column_index, value=' ')
-
-# Save the modified Excel file
-workbook.save(excel_file)'''
