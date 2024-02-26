@@ -4,8 +4,8 @@ import openpyxl
 import datetime
 
 # Feature class location
-feature_class = r'C:\Users\Nolan\Documents\ArcGIS\ArcGIS Pro Projects\DateDelete\DateCleanUpDelete\GISDBSERVER22.sde\HUD_LGIM.DBO.State_Lab_Samples'
-excel_file = r"C:\Users\Nolan\Documents\ExcelSheets\CMDP_Sample_Result_Template - Copy3.xlsx"
+feature_class = r'\\portalserver\Production Projects\GISDBSERVER22.sde\HUD_LGIM.DBO.State_Lab_Samples'
+excel_file = r"\\VSERVER22\ForEveryone\Nolan\CMDP_Sample_Result_Template - Excel.xlsx"
 
 # Open Excel file
 workbook = openpyxl.load_workbook(excel_file)
@@ -41,20 +41,15 @@ with arcpy.da.SearchCursor(feature_class, fields_in_server) as cursor:
     row_index = 9  # Assuming the data starts from the ninth row in Excel
     while sheet.cell(row=row_index, column=1).value is not None:
         row_index += 1
+    
 
     # Write data to Excel
     for row in cursor:
         # Create a dictionary to map feature class field names to values
         data_dict = dict(zip(fields_in_server, row))
-        sample_id=1
         # Write data to the next available row in Excel, treating all values as text
         for excel_field, server_field in field_mapping.items():
             sheet.cell(row=row_index, column=fields_in_excel.index(excel_field) + 1, value=str(data_dict[server_field])) # value=str(data_dict[server_field]))
-
-        # Update the entire 'WS ID*' column in the Excel sheet for the current row
-        ws_id_column_index = fields_in_excel.index('Sample ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
-        sheet.cell(row=row_index, column=ws_id_column_index, value=sample_id)
-        sample_id+=1
 
         # Update the entire 'WS ID*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('WS ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
@@ -99,7 +94,7 @@ workbook.save(excel_file)
 workbook = openpyxl.load_workbook(excel_file)
 sheet = workbook.active
 
-# Delete rows where 'Sample Received Date f' equals 'home'
+# Delete rows where 'Sample Received Date f' equals 'None'
 delete_rows = []
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
@@ -129,7 +124,7 @@ for row in range(9, sheet.max_row + 1):
     if cell_value:
         try:
             # Parse the existing date
-            existing_date = datetime.datetime.strptime(str(cell_value), "%Y-%m-%d %H:%M:%S").date()
+            existing_date = datetime.datetime.strptime(str(cell_value), "%Y-%m-%d %H:%M:%S.%f").date()
             
             # Format the date as MM/DD/YYYY
             formatted_date = existing_date.strftime("%m/%d/%Y")
@@ -142,6 +137,32 @@ for row in range(9, sheet.max_row + 1):
 # Save the final modified Excel file after formatting dates
 workbook.save(excel_file)
 
+
+
+# Open Excel file
+workbook = openpyxl.load_workbook(excel_file)
+sheet = workbook.active
+
+
+# Format 'Collection Date*f' to MM/DD/YYYY
+for row in range(9, sheet.max_row + 1):
+    cell_value = sheet.cell(row=row, column=fields_in_excel.index('Sample Received Date f') + 1).value
+    
+    if cell_value:
+        try:
+            # Parse the existing date
+            existing_date = datetime.datetime.strptime(str(cell_value), "%Y-%m-%d %H:%M:%S").date()
+            
+            # Format the date as MM/DD/YYYY
+            formatted_date = existing_date.strftime("%m/%d/%Y")
+            
+            # Update the cell with the formatted date
+            sheet.cell(row=row, column=fields_in_excel.index('Sample Received Date f') + 1, value=formatted_date)
+        except ValueError:
+            print(f"Unable to parse date in row {row}: {cell_value}")
+
+# Save the final modified Excel file after formatting dates
+workbook.save(excel_file)
 
 # Open Excel file
 workbook = openpyxl.load_workbook(excel_file)
@@ -160,6 +181,49 @@ for row in range(9, sheet.max_row + 1):
             
             # Update the cell with the formatted date
             sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1, value=formatted_date)
+        except ValueError:
+            print(f"Unable to parse date in row {row}: {cell_value}")
+
+# Save the final modified Excel file after formatting dates
+workbook.save(excel_file)
+
+for row in range(9, sheet.max_row + 1):
+    cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
+    
+    if cell_value:
+        try:
+            # Parse the existing date
+            existing_date = datetime.datetime.strptime(str(cell_value), "%Y-%m-%d %H:%M:%S.%f").date()
+            
+            # Format the date as MM/DD/YYYY
+            formatted_date = existing_date.strftime("%m/%d/%Y")
+            
+            # Update the cell with the formatted date
+            sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1, value=formatted_date)
+        except ValueError:
+            print(f"Unable to parse date in row {row}: {cell_value}")
+
+# Save the final modified Excel file after formatting dates
+workbook.save(excel_file)
+
+
+# Open Excel file
+workbook = openpyxl.load_workbook(excel_file)
+sheet = workbook.active
+
+for row in range(9, sheet.max_row + 1):
+    cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Start Date f') + 1).value
+    
+    if cell_value:
+        try:
+            # Parse the existing date
+            existing_date = datetime.datetime.strptime(str(cell_value), "%Y-%m-%d %H:%M:%S.%f").date()
+            
+            # Format the date as MM/DD/YYYY
+            formatted_date = existing_date.strftime("%m/%d/%Y")
+            
+            # Update the cell with the formatted date
+            sheet.cell(row=row, column=fields_in_excel.index('Analysis Start Date f') + 1, value=formatted_date)
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
@@ -190,6 +254,28 @@ for row in range(9, sheet.max_row + 1):
 # Save the final modified Excel file after formatting dates
 workbook.save(excel_file)
 
+# Open Excel file
+workbook = openpyxl.load_workbook(excel_file)
+sheet = workbook.active
+
+for row in range(9, sheet.max_row + 1):
+    cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Completed Date') + 1).value
+    
+    if cell_value:
+        try:
+            # Parse the existing date
+            existing_date = datetime.datetime.strptime(str(cell_value), "%Y-%m-%d %H:%M:%S.%f").date()
+            
+            # Format the date as MM/DD/YYYY
+            formatted_date = existing_date.strftime("%m/%d/%Y")
+            
+            # Update the cell with the formatted date
+            sheet.cell(row=row, column=fields_in_excel.index('Analysis Completed Date') + 1, value=formatted_date)
+        except ValueError:
+            print(f"Unable to parse date in row {row}: {cell_value}")
+
+# Save the final modified Excel file after formatting dates
+workbook.save(excel_file)
 
 # Open Excel file
 workbook = openpyxl.load_workbook(excel_file)
@@ -214,13 +300,12 @@ for row in range(9, sheet.max_row + 1):
 # Save the final modified Excel file after formatting dates
 workbook.save(excel_file)
 
-
 # Open Excel file
 workbook = openpyxl.load_workbook(excel_file)
 sheet = workbook.active
 
 # Clear data in 'Repeat Location' and 'Original Sample ID' columns
-columns_to_clear = ['Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference',
+columns_to_clear = ['Sample ID*', 'Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference',
                      'Volume Assayed (ML) f', 'Method f', 'Source Type' ]
 
 for column in columns_to_clear:
@@ -231,3 +316,47 @@ for column in columns_to_clear:
 
 # Save the final modified Excel file after clearing data
 workbook.save(excel_file)
+
+
+# Open Excel file
+workbook = openpyxl.load_workbook(excel_file)
+sheet = workbook.active
+
+# Find the first empty row in the Excel sheet
+row_index = 9  # Assuming the data starts from the ninth row in Excel
+while sheet.cell(row=row_index, column=1).value is not None:
+    row_index += 1
+
+# Update the 'Sample ID*' column with row numbers starting from 1 to 70
+for row_number in range(row_index, min(row_index + 70, sheet.max_row + 1)):
+    sheet.cell(row=row_number, column=fields_in_excel.index('Sample ID*') + 1, value=row_number - row_index + 1)
+
+
+
+# Save the modified Excel file
+workbook.save(excel_file)
+
+'''
+# Open Excel file
+workbook = openpyxl.load_workbook(excel_file)
+sheet = workbook.active
+
+# Find the index of the 'A/P*f' column
+ap_column_index = fields_in_excel.index('A/P*f') + 1  # Adding 1 to convert from 0-based to 1-based index
+
+# Iterate through rows and update 'A/P*f' column
+for row in range(9, sheet.max_row + 1):
+    cell_value = sheet.cell(row=row, column=ap_column_index).value
+    
+    if cell_value:
+        # Check for 'Negative' and update to 'Absent'
+        if cell_value.strip().lower() == 'negative':
+            sheet.cell(row=row, column=ap_column_index, value='Absent')
+        # Check for 'Positive' and update to 'Present'
+        elif cell_value.strip().lower() == 'positive':
+            sheet.cell(row=row, column=ap_column_index, value='Present')
+        elif cell_value.strip().lower() == 'none':
+            sheet.cell(row=row, column=ap_column_index, value=' ')
+
+# Save the modified Excel file
+workbook.save(excel_file)'''
