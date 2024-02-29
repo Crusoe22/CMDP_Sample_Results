@@ -251,8 +251,8 @@ for row in range(9, sheet.max_row + 1):
 
 
 # Clear data in 'Repeat Location' and 'Original Sample ID' columns
-columns_to_clear = ['Sample ID*', 'Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference',
-                     'Volume Assayed (ML) f', 'Method f', 'Source Type', 'A/P*f' ]
+columns_to_clear = ['Sample ID*', 'Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 
+                    'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference','Volume Assayed (ML) f', 'Method f', 'Source Type', 'A/P*f' ]
 
 for column in columns_to_clear:
     column_index = fields_in_excel.index(column) + 1  # Adding 1 to convert from 0-based to 1-based index
