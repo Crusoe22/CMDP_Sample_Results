@@ -251,7 +251,7 @@ for row in range(9, sheet.max_row + 1):
 
 
 # Clear data in 'Repeat Location' and 'Original Sample ID' columns
-columns_to_clear = ['Sample ID*', 'Sampling Point ID*', 'Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference',
+columns_to_clear = ['Sample ID*', 'Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference',
                      'Volume Assayed (ML) f', 'Method f', 'Source Type', 'A/P*f' ]
 
 for column in columns_to_clear:
