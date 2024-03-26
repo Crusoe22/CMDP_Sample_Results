@@ -89,7 +89,7 @@ with arcpy.da.SearchCursor(feature_class, fields_in_server) as cursor:
 
         # Update the entire 'Result UOM*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Sampling Point ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
-        sheet.cell(row=row_index, column=ws_id_column_index, value='LC001')
+        sheet.cell(row=row_index, column=ws_id_column_index, value='DS01')
 
         row_index += 1
 
@@ -261,6 +261,10 @@ for column in columns_to_clear:
         sheet.cell(row=row, column=column_index).value=None
 
 
+# Get current date
+time = datetime.datetime.now()
+sample_id_date = time.strftime("%m%d%y")
+
 # Create Sample ID
 # Find the first empty row in the Excel sheet
 row_index = 9  # Assuming the data starts from the ninth row in Excel
@@ -269,7 +273,8 @@ while sheet.cell(row=row_index, column=1).value is not None:
 
 # Update the 'Sample ID*' column with row numbers starting from 1 to 70
 for row_number in range(row_index, min(row_index + 70, sheet.max_row + 1)):
-    sheet.cell(row=row_number, column=fields_in_excel.index('Sample ID*') + 1, value=row_number - row_index + 1)
+    sample_id = f"{sample_id_date}-{row_number - row_index + 1}"
+    sheet.cell(row=row_number, column=fields_in_excel.index('Sample ID*') + 1, value=sample_id)
 
 
 
@@ -289,26 +294,6 @@ for row in range(9, sheet.max_row + 1):
     elif comment_value and 'positive' in comment_value.strip().lower():
         sheet.cell(row=row, column=ap_column_index, value='Present')
 
-
-
-
-
-'''#Add Sample Point ID* for all values in Range
-sampling_point_ids = [f'LC{i:03d}' for i in range(1, 71)]
-
-
-# Assuming 'Sampling Point ID*' is the correct column name in fields_in_excel
-column_name = 'Sampling Point ID*'
-column_index = fields_in_excel.index(column_name) + 1  # Adding 1 to convert from 0-based to 1-based index
-
-# Iterate through rows and update 'Sampling Point ID*' column
-for row_index in range(9, sheet.max_row + 1):
-    if row_index - 9 < len(sampling_point_ids):
-        # Update the 'Sampling Point ID*' column with values from sampling_point_ids
-        sheet.cell(row=row_index, column=column_index, value=sampling_point_ids[row_index - 9])
-    else:
-        # No more values in sampling_point_ids, break the loop
-        break'''
 
 # Save the modified Excel file
 workbook.save(excel_file)
