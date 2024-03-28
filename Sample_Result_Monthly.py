@@ -109,7 +109,7 @@ for row in reversed(delete_rows):
     sheet.delete_rows(row)
 
 # Save the final modified Excel file after deleting rows
-workbook.save(excel_file)
+# workbook.save(excel_file)
 
 
 # Format 'Sample Received Date f' to MM/DD/YYYY
