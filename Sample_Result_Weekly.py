@@ -108,9 +108,6 @@ for row in reversed(delete_rows):
     print("Deleting row:", row)
     sheet.delete_rows(row)
 
-# Save the final modified Excel file after deleting rows
-#workbook.save(excel_file)
-
 
 # Format 'Sample Received Date f' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
@@ -293,6 +290,21 @@ for row in range(9, sheet.max_row + 1):
             # Check if 'Comment' contains 'Positive' (case-insensitive)
     elif comment_value and 'positive' in comment_value.strip().lower():
         sheet.cell(row=row, column=ap_column_index, value='Present')
+
+
+# Delete rows where 'Collection Date*f' equals 'None'
+delete_rows = []
+for row in range(9, sheet.max_row + 1):
+    cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
+    if cell_value == 'None':
+        delete_rows.append(row)
+
+# Print to check which rows are going to be deleted
+print("Rows to be deleted:", delete_rows)
+
+for row in reversed(delete_rows):
+    print("Deleting row:", row)
+    sheet.delete_rows(row)
 
 
 # Save the modified Excel file

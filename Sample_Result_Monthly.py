@@ -83,14 +83,21 @@ with arcpy.da.SearchCursor(feature_class, fields_in_server) as cursor:
         ws_id_column_index = fields_in_excel.index('Result UOM*') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='mg/L')
         
-        # Update the entire 'Result UOM*' column in the Excel sheet for the current row
+        # Update the entire 'Facility ID*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Facility ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='DS01')
 
-        # Update the entire 'Result UOM*' column in the Excel sheet for the current row
+        # Update the entire 'Sampling Point ID*' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Sampling Point ID*') + 1  # Adding 1 to convert from 0-based to 1-based index
         sheet.cell(row=row_index, column=ws_id_column_index, value='DS01')
 
+        # Update the entire 'Volume Assayed (ML) f' column in the Excel sheet for the current row
+        ws_id_column_index = fields_in_excel.index('Volume Assayed (ML) f') + 1  # Adding 1 to convert from 0-based to 1-based index
+        sheet.cell(row=row_index, column=ws_id_column_index, value='100')
+
+        # Update the entire 'Method f' column in the Excel sheet for the current row
+        ws_id_column_index = fields_in_excel.index('Method f') + 1  # Adding 1 to convert from 0-based to 1-based index
+        sheet.cell(row=row_index, column=ws_id_column_index, value='9223B')
         row_index += 1
 
 
@@ -107,9 +114,6 @@ print("Rows to be deleted:", delete_rows)
 for row in reversed(delete_rows):
     print("Deleting row:", row)
     sheet.delete_rows(row)
-
-# Save the final modified Excel file after deleting rows
-# workbook.save(excel_file)
 
 
 # Format 'Sample Received Date f' to MM/DD/YYYY
@@ -252,7 +256,7 @@ for row in range(9, sheet.max_row + 1):
 
 # Clear data in 'Repeat Location' and 'Original Sample ID' columns
 columns_to_clear = ['Sample ID*', 'Repeat Location', 'Original Sample ID +', 'Original Reporting Lab.ID', 'Original Collection Date', 
-                    'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference','Volume Assayed (ML) f', 'Method f', 'Source Type', 'A/P*f' ]
+                    'Sample Collector Name', 'Comment', 'Count', 'Units +', 'Volume (ML) +', 'Interference', 'Source Type', 'A/P*f' ]
 
 for column in columns_to_clear:
     column_index = fields_in_excel.index(column) + 1  # Adding 1 to convert from 0-based to 1-based index
