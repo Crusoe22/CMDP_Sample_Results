@@ -97,7 +97,7 @@ with arcpy.da.SearchCursor(feature_class, fields_in_server) as cursor:
 
         # Update the entire 'Method f' column in the Excel sheet for the current row
         ws_id_column_index = fields_in_excel.index('Method f') + 1  # Adding 1 to convert from 0-based to 1-based index
-        sheet.cell(row=row_index, column=ws_id_column_index, value='9223B')
+        sheet.cell(row=row_index, column=ws_id_column_index, value='9223B-COLILERT')
         row_index += 1
 
 
@@ -151,7 +151,7 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-
+# Format ''Collection Date*f'' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
     
@@ -168,7 +168,7 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-
+# Format ''Collection Date*f'' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Collection Date*f') + 1).value
     
@@ -185,7 +185,7 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-
+# Format 'Analysis Start Date f' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Start Date f') + 1).value
     
@@ -202,7 +202,7 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-
+# Format 'Analysis Start Date f' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Start Date f') + 1).value
     
@@ -219,7 +219,7 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-
+# Format 'Analysis Completed Date' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Completed Date') + 1).value
     
@@ -236,7 +236,7 @@ for row in range(9, sheet.max_row + 1):
         except ValueError:
             print(f"Unable to parse date in row {row}: {cell_value}")
 
-
+# Format 'Analysis Completed Date' to MM/DD/YYYY
 for row in range(9, sheet.max_row + 1):
     cell_value = sheet.cell(row=row, column=fields_in_excel.index('Analysis Completed Date') + 1).value
     
